@@ -1,6 +1,6 @@
 # определения и вызов модулей
 import pandas as pd
-from get_api_kladr import get_kladr
+from get_api_kladr import FoundColumn, KladrHouse
 
 
 if __name__ == "__main__":
@@ -8,4 +8,10 @@ if __name__ == "__main__":
     df = pd.read_csv('data.csv',
                      encoding='cp1251', sep=';', decimal='.', dtype='object')  # type: pd.DataFrame
 
-    fc = get_kladr(df)
+    d = FoundColumn(city='Бердск', street='')
+
+    fc = KladrHouse(df, con='test')
+    fc.get_kladr(FoundColumn(city='Бердск', street='Мира'), True)
+
+    f = fc.con
+    print(d)
