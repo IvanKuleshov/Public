@@ -32,3 +32,8 @@ con = sqlite3.connect("binance.db", isolation_level=None)
 
 sql = '''SELECT * FROM debtors'''
 df = pd.read_sql_query(sql=sql, con=conn)
+
+
+UPDATE data
+SET
+STREET = replace(STREET,'Геодезческая','!Я улицо')
