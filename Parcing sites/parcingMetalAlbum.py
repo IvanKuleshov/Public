@@ -14,6 +14,7 @@
 
 import pandas as pd
 from bs4 import BeautifulSoup
+import requests
 from time import sleep  # для выставления задержки перед запросом, можно убрать
 from typing import Tuple  # для type hinting у функции Get_Groups_Darkalbum, можно убрать и удалить -> у функции
 import json
@@ -23,11 +24,12 @@ import tkinter as tk
 from tkinter import messagebox
 
 
-#  !!Добавить header
 def get_parcing_html_text(page: str) -> str:
-    import requests
     try:
-        r = requests.get(page)
+        headers = {"User-Agent":
+                       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"}
+
+        r = requests.get(page, headers=headers)
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         raise SystemExit(err)
@@ -83,7 +85,7 @@ group_data = pd.DataFrame.from_dict({})
 # Перебираем страницы
 for i in range(50):
     page = get_parcing_html_text('https://darkalbum.ru/albums/page/' + str(i + 1) + '/')  # очередная страница
-    sleep(0.05)
+    sleep(1)
     data, status = Get_Groups_Darkalbum(page, options['link'])  # получаем информацию по альбомам на странице
     group_data = group_data.append(data)  # добавляем очередную страницу
 
@@ -95,7 +97,7 @@ try:
     with open(dirname + 'parcing_option.json', 'w') as f:
         options['link'] = group_data.iloc[0]['Ссылка']
         json.dump(options, f)
-except Exception:
+except Exception as err:
     pass
 
 #  Определяем, не вышли ли обновления наших любимых групп
