@@ -1,3 +1,4 @@
+# тестирование гит
 # определения и вызов модулей
 import pandas as pd
 import sqlite3
